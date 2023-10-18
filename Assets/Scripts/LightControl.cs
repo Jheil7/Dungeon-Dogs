@@ -12,22 +12,30 @@ public class LightControl : MonoBehaviour
     Vector3 mousePosition;
     Vector3 worldPosition;
     bool isTraveling;
+    Rigidbody2D lightRb;
     // Start is called before the first frame update
     void Start()
     {
         isTraveling=true;
         attachedToPlayer=true;
         player=FindObjectOfType<Player>();
+        lightRb=GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        currentPosition=transform.position;
+        if(isTraveling){
+            lightRb.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
+            LightTraveling();
+        }
         
     }
 
     void FixedUpdate() {
-        LightTraveling();
+
         if(attachedToPlayer){
             transform.position=player.transform.position;
         }
@@ -36,20 +44,25 @@ public class LightControl : MonoBehaviour
 
     void OnFire(){
         attachedToPlayer=false;
-        currentPosition=transform.position;
         mousePosition = Input.mousePosition;
-        mousePosition.z=0;
         worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
+        worldPosition.z=0;
+        isTraveling=true;
         
         //transform.position=worldPosition;
     }
 
     void LightTraveling(){
+        Debug.Log(lightRb.velocity);
+        //Debug.Log(Vector3.Distance(currentPosition,worldPosition));
         if(Vector3.Distance(currentPosition,worldPosition)<=1){
+            lightRb.velocity=new Vector3(0,0,0);
             isTraveling=false;
         }
-        if(isTraveling){
-            transform.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
-        }
+
+    }
+
+    IEnumerator TravelCheck(){
+        yield return new WaitForSeconds(2);
     }
 }
