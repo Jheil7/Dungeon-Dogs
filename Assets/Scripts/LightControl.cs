@@ -12,12 +12,14 @@ public class LightControl : MonoBehaviour
     Vector3 mousePosition;
     Vector3 worldPosition;
     bool isTraveling;
+    bool recalling;
     Rigidbody2D lightRb;
     // Start is called before the first frame update
     void Start()
     {
-        isTraveling=true;
+        isTraveling=false;
         attachedToPlayer=true;
+        recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
 
@@ -28,17 +30,23 @@ public class LightControl : MonoBehaviour
     {
         currentPosition=transform.position;
         if(isTraveling){
-            lightRb.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
+            MovetoPosition();
             LightTraveling();
         }
-        
+        if(recalling){
+            worldPosition=player.transform.position;
+            MovetoPosition();
+            LightTraveling();
+        }
+        if(attachedToPlayer){
+            transform.position=player.transform.position;
+            isTraveling=false;
+            recalling=false;
+        }
     }
 
     void FixedUpdate() {
 
-        if(attachedToPlayer){
-            transform.position=player.transform.position;
-        }
 
     }
 
@@ -48,21 +56,24 @@ public class LightControl : MonoBehaviour
         worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
         worldPosition.z=0;
         isTraveling=true;
-        
-        //transform.position=worldPosition;
+    }
+
+    void OnAltFire(){
+        recalling=true;
     }
 
     void LightTraveling(){
-        Debug.Log(lightRb.velocity);
-        //Debug.Log(Vector3.Distance(currentPosition,worldPosition));
         if(Vector3.Distance(currentPosition,worldPosition)<=1){
             lightRb.velocity=new Vector3(0,0,0);
             isTraveling=false;
+            recalling=false;
+            if(Vector3.Distance(worldPosition,player.transform.position)<=1){
+                attachedToPlayer=true;
+            }
         }
-
     }
 
-    IEnumerator TravelCheck(){
-        yield return new WaitForSeconds(2);
+    void MovetoPosition(){
+        lightRb.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
     }
 }
