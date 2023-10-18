@@ -8,9 +8,14 @@ public class LightControl : MonoBehaviour
     Player player;
     bool attachedToPlayer;
     [SerializeField ] float lightMoveSpeed;
+    Vector3 currentPosition;
+    Vector3 mousePosition;
+    Vector3 worldPosition;
+    bool isTraveling;
     // Start is called before the first frame update
     void Start()
     {
+        isTraveling=true;
         attachedToPlayer=true;
         player=FindObjectOfType<Player>();
     }
@@ -22,18 +27,29 @@ public class LightControl : MonoBehaviour
     }
 
     void FixedUpdate() {
+        LightTraveling();
         if(attachedToPlayer){
             transform.position=player.transform.position;
         }
+
     }
 
     void OnFire(){
         attachedToPlayer=false;
-        Vector3 currentPosition=transform.position;
-        Vector3 mousePosition = Input.mousePosition;
+        currentPosition=transform.position;
+        mousePosition = Input.mousePosition;
         mousePosition.z=0;
-        Vector3 worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
+        worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
         
-        transform.position=worldPosition;
+        //transform.position=worldPosition;
+    }
+
+    void LightTraveling(){
+        if(Vector3.Distance(currentPosition,worldPosition)<=1){
+            isTraveling=false;
+        }
+        if(isTraveling){
+            transform.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
+        }
     }
 }
