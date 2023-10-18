@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class LightControl : MonoBehaviour
 {
@@ -14,7 +15,21 @@ public class LightControl : MonoBehaviour
     bool isTraveling;
     bool recalling;
     Rigidbody2D lightRb;
-    // Start is called before the first frame update
+    LightMeter lightMeter;
+    [SerializeField] float maxLightValue;
+    [SerializeField] float lightDrainValue;
+    float lightValue;
+    [SerializeField] float lightDrainTimer;
+
+    public float LightValue(){
+        return lightValue;
+    }
+
+    public float MaxLightValue(){
+        return maxLightValue;
+    }
+
+
     void Start()
     {
         isTraveling=false;
@@ -22,6 +37,8 @@ public class LightControl : MonoBehaviour
         recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
+        lightMeter=FindAnyObjectByType<LightMeter>();
+        lightValue=maxLightValue;
 
     }
 
@@ -56,6 +73,8 @@ public class LightControl : MonoBehaviour
         worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
         worldPosition.z=0;
         isTraveling=true;
+
+        
     }
 
     void OnAltFire(){
@@ -75,5 +94,25 @@ public class LightControl : MonoBehaviour
 
     void MovetoPosition(){
         lightRb.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
+    }
+
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.tag=="Player"){
+            StartCoroutine("LightDrain");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag=="Player"){
+            StopCoroutine("LightDrain");
+        }
+    }
+
+    public IEnumerator LightDrain(){
+        while(lightValue>=0){
+            yield return new WaitForSeconds(lightDrainTimer);
+            lightValue-=lightDrainValue;
+        }
+
     }
 }
