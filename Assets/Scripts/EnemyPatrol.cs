@@ -19,8 +19,11 @@ public class EnemyPatrol : MonoBehaviour
     }
 
     void OnTriggerExit2D(Collider2D other) {
-        moveSpeed=-moveSpeed;
-        FlipEnemyFacing();
+        if(other.tag=="Ground"){
+            moveSpeed=-moveSpeed;
+            FlipEnemyFacing();
+        }
+
         
     }
 
