@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     Vector2 rawInput;
     Rigidbody2D playerRigidbody;
-    CapsuleCollider2D footCollider;
+    BoxCollider2D footCollider;
     Animator animator;
     bool facingLeft = true;
     [SerializeField] int jumpCount = 0;
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         playerRigidbody=GetComponent<Rigidbody2D>();
-        footCollider=GetComponent<CapsuleCollider2D>();
+        footCollider=GetComponent<BoxCollider2D>();
         animator=GetComponent<Animator>();
     }
 
