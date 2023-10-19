@@ -11,6 +11,7 @@ public class EnemyPatrol : MonoBehaviour
     {
         myRigidBody=GetComponent<Rigidbody2D>();
         frontCollider=GetComponent<CapsuleCollider2D>();
+        Physics.IgnoreLayerCollision(7,7);
     }
 
     void FixedUpdate()
