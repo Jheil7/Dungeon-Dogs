@@ -57,7 +57,7 @@ public class LightControl : MonoBehaviour
         }
         if(attachedToPlayer){
             transform.position=player.transform.position;
-            Debug.Log(transform.position);
+            //Debug.Log(transform.position);
             isTraveling=false;
             recalling=false;
         }
