@@ -9,8 +9,10 @@ public class LightIntensity : MonoBehaviour
     LightControl lightControl;
     Light2D light2D;
     [SerializeField] float startingLightSize;
-    float lightSize;
+    public float lightSize;
     // Start is called before the first frame update
+
+
     void Start()
     {
         lightControl=FindAnyObjectByType<LightControl>();

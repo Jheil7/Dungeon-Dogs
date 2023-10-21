@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     BoxCollider2D footCollider;
     Animator animator;
     bool facingLeft = true;
+    bool alive;
     [SerializeField] int jumpCount = 0;
 
     [Header("Movement Attributes")]
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        alive=true;
         playerRigidbody=GetComponent<Rigidbody2D>();
         footCollider=GetComponent<BoxCollider2D>();
         animator=GetComponent<Animator>();
@@ -27,17 +29,19 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        alive=!animator.GetBool("Dead");
     }
 
     private void FixedUpdate() {
+        if(!alive){playerRigidbody.velocity=Vector2.zero;}
+        else{
         PlayerMove();
         if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) {
             jumpCount = 0;
             animator.SetBool("IsJumping", false);
         } else {
             animator.SetBool("IsJumping", true);
-        }
+        }}
     }
 
     void OnMove(InputValue value){
@@ -61,9 +65,12 @@ public class Player : MonoBehaviour
     }
 
     void Flip() {
-        Vector3 currentScale = gameObject.transform.localScale;
-        currentScale.x *= -1;
-        gameObject.transform.localScale = currentScale;
-        facingLeft = !facingLeft;
+        if(alive){
+            Vector3 currentScale = gameObject.transform.localScale;
+            currentScale.x *= -1;
+            gameObject.transform.localScale = currentScale;
+            facingLeft = !facingLeft;
+        }
+
     }
 }

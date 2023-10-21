@@ -6,16 +6,19 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-    Vector2[] checkpointPos;
     SpawnManager spawnManager;
     Light2D lanternLight;
+    bool checkpointActive;
+    int glowSize=10;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        checkpointActive=false;
         spawnManager=FindObjectOfType<SpawnManager>();
         lanternLight=GetComponentInChildren<Light2D>();
-        checkpointPos=new Vector2[3];
+        lanternLight.size=0;
 
     }
 
@@ -26,15 +29,14 @@ public class Checkpoint : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag=="Player"){
-            
-            lanternLight.gameObject.SetActive(true);
-            Debug.Log("asdfa");
-            
+        if(other.tag=="Player"&&checkpointActive==false){
+            spawnManager.AddtoArray(this);
+            lanternLight.size=glowSize;
+            checkpointActive=true;            
         }
     }
 
-    void MarkCheckpoint(){
-
+    public Vector2 MarkCheckpoint(){
+        return this.transform.position;
     }
 }
