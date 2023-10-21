@@ -27,13 +27,6 @@ public class EnemyPatrol : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
-        if(other.tag=="Player"){
-            Debug.Log("Player Dead");
-            //Add player death animation etc.
-        }
-    }
-
     void FlipEnemyFacing(){
         transform.localScale= new Vector2(-(Mathf.Sign(myRigidBody.velocity.x)),1f);
     }

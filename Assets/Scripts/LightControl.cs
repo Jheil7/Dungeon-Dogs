@@ -7,15 +7,14 @@ using UnityEngine.UI;
 public class LightControl : MonoBehaviour
 {
     Player player;
-    bool attachedToPlayer;
+    public bool attachedToPlayer;
     [SerializeField ] float lightMoveSpeed;
     Vector3 currentPosition;
     Vector3 mousePosition;
     Vector3 worldPosition;
-    bool isTraveling;
-    bool recalling;
+    public bool isTraveling;
+    public bool recalling;
     Rigidbody2D lightRb;
-    LightMeter lightMeter;
     [SerializeField] float maxLightValue;
     [SerializeField] float lightDrainValue;
     float lightValue;
@@ -29,6 +28,17 @@ public class LightControl : MonoBehaviour
         return maxLightValue;
     }
 
+    public void SetLighttoMax(){
+        lightValue=maxLightValue;
+    }
+
+    public void SetPositionToPlayer(){
+        lightRb.position=player.transform.position;
+        attachedToPlayer=true;
+        isTraveling=false;
+        recalling=false;
+    }
+
 
     void Start()
     {
@@ -37,7 +47,6 @@ public class LightControl : MonoBehaviour
         recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
-        lightMeter=FindAnyObjectByType<LightMeter>();
         lightValue=maxLightValue;
 
     }
@@ -45,6 +54,10 @@ public class LightControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    void FixedUpdate() {
         currentPosition=transform.position;
         if(isTraveling){
             MovetoPosition();
@@ -61,10 +74,6 @@ public class LightControl : MonoBehaviour
             isTraveling=false;
             recalling=false;
         }
-    }
-
-    void FixedUpdate() {
-
 
     }
 
