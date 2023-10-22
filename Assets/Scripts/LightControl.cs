@@ -19,6 +19,7 @@ public class LightControl : MonoBehaviour
     [SerializeField] float lightDrainValue;
     float lightValue;
     [SerializeField] float lightDrainTimer;
+    SpriteRenderer spriteRenderer;
 
     public float LightValue(){
         return lightValue;
@@ -47,6 +48,7 @@ public class LightControl : MonoBehaviour
         recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
+        spriteRenderer=GetComponent<SpriteRenderer>();
         lightValue=maxLightValue;
 
     }
@@ -73,6 +75,7 @@ public class LightControl : MonoBehaviour
             //Debug.Log(transform.position);
             isTraveling=false;
             recalling=false;
+            spriteRenderer.enabled = false;
         }
 
     }
@@ -84,6 +87,9 @@ public class LightControl : MonoBehaviour
             worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
             worldPosition.z=0;
             isTraveling=true;
+            if(!spriteRenderer.enabled){
+                spriteRenderer.enabled = true;
+            }
         }
 
 
