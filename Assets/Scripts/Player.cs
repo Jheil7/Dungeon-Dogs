@@ -10,17 +10,22 @@ public class Player : MonoBehaviour
     BoxCollider2D footCollider;
     Animator animator;
     bool facingLeft = true;
-    bool alive;
+    bool isControllable;
+    bool isDead;
     [SerializeField] int jumpCount = 0;
-
     [Header("Movement Attributes")]
     [SerializeField] float playerSpeed;
     [SerializeField] float jumpHeight;
     
+    public bool IsControllable{
+        get{return isControllable;}
+        set{isControllable=value;}
+        }
 
     void Start()
     {
-        alive=true;
+        isDead=false;
+        isControllable=true;
         playerRigidbody=GetComponent<Rigidbody2D>();
         footCollider=GetComponent<BoxCollider2D>();
         animator=GetComponent<Animator>();
@@ -29,19 +34,24 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        alive=!animator.GetBool("Dead");
+        isDead=!animator.GetBool("Dead");
+        if(!isDead){
+            IsControllable=false;
+        }
+        else{
+            IsControllable=true;
+        }
     }
 
     private void FixedUpdate() {
-        if(!alive){playerRigidbody.velocity=Vector2.zero;}
-        else{
         PlayerMove();
         if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) {
             jumpCount = 0;
             animator.SetBool("IsJumping", false);
-        } else {
+        } 
+        else {
             animator.SetBool("IsJumping", true);
-        }}
+            }
     }
 
     void OnMove(InputValue value){
@@ -50,10 +60,15 @@ public class Player : MonoBehaviour
         if(rawInput.x < 0 && !facingLeft) Flip();
     }
     void PlayerMove(){
-        Vector2 delta=rawInput*playerSpeed*Time.deltaTime;
-        playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
-        if(delta != Vector2.zero) animator.SetFloat("Speed", 1f);
-        else animator.SetFloat("Speed", 0f);
+        if(isControllable){
+            Vector2 delta=rawInput*playerSpeed*Time.deltaTime;
+            playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
+            if(delta != Vector2.zero) animator.SetFloat("Speed", 1f);
+            else animator.SetFloat("Speed", 0f);}
+        
+        else{
+            playerRigidbody.velocity=Vector2.zero;
+        }
     }
 
     void OnJump(){
@@ -65,12 +80,9 @@ public class Player : MonoBehaviour
     }
 
     void Flip() {
-        if(alive){
-            Vector3 currentScale = gameObject.transform.localScale;
-            currentScale.x *= -1;
-            gameObject.transform.localScale = currentScale;
-            facingLeft = !facingLeft;
-        }
-
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+        facingLeft = !facingLeft;
     }
 }

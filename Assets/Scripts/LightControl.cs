@@ -63,12 +63,12 @@ public class LightControl : MonoBehaviour
             MovetoPosition();
             LightTraveling();
         }
-        if(recalling){
+        else if(recalling){
             worldPosition=player.transform.position;
             MovetoPosition();
             LightTraveling();
         }
-        if(attachedToPlayer){
+        else if(attachedToPlayer){
             transform.position=player.transform.position;
             //Debug.Log(transform.position);
             isTraveling=false;
@@ -78,11 +78,14 @@ public class LightControl : MonoBehaviour
     }
 
     void OnFire(){
-        attachedToPlayer=false;
-        mousePosition = Input.mousePosition;
-        worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
-        worldPosition.z=0;
-        isTraveling=true;
+        if(player.IsControllable){
+            attachedToPlayer=false;
+            mousePosition = Input.mousePosition;
+            worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
+            worldPosition.z=0;
+            isTraveling=true;
+        }
+
 
         
     }
@@ -107,7 +110,8 @@ public class LightControl : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D other) {
-        if(other.tag=="Player"){
+        if(other.tag=="Player"&&!attachedToPlayer){
+            StopCoroutine("LightDrain");
             StartCoroutine("LightDrain");
         }
     }
