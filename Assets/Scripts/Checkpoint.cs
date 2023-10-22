@@ -8,6 +8,7 @@ public class Checkpoint : MonoBehaviour
 {
     SpawnManager spawnManager;
     Light2D lanternLight;
+    LightControl lightControl;
     bool checkpointActive;
     int glowSize=10;
 
@@ -18,6 +19,7 @@ public class Checkpoint : MonoBehaviour
         checkpointActive=false;
         spawnManager=FindObjectOfType<SpawnManager>();
         lanternLight=GetComponentInChildren<Light2D>();
+        lightControl=FindObjectOfType<LightControl>();
         lanternLight.size=0;
 
     }
@@ -32,7 +34,9 @@ public class Checkpoint : MonoBehaviour
         if(other.tag=="Player"&&checkpointActive==false){
             spawnManager.AddtoArray(this);
             lanternLight.size=glowSize;
-            checkpointActive=true;            
+            checkpointActive=true;
+            lightControl.SetLighttoMax();
+            lightControl.SetPositionToPlayer();
         }
     }
 
