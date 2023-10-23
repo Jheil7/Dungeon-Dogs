@@ -7,8 +7,6 @@ TagManager:
   - Ground
   - Enemy
   - Light
-  - TitleSpriteOn
-  - TitleSpriteOff
   layers:
   - Default
   - TransparentFX
