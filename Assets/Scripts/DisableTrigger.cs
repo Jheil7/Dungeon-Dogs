@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class TriggerNextLevel : MonoBehaviour
+public class DisableTrigger : MonoBehaviour
 {
-    int sceneIndex;
+    BoxCollider2D boxCollider;
     // Start is called before the first frame update
     void Start()
     {
-        sceneIndex=SceneManager.GetActiveScene().buildIndex;
+        boxCollider=GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -20,7 +19,7 @@ public class TriggerNextLevel : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Player"){
-            SceneManager.LoadScene(sceneIndex+1);
+            boxCollider.enabled=false;
         }
     }
 }
