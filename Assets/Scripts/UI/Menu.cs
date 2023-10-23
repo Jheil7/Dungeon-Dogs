@@ -11,13 +11,15 @@ public class PauseMenu : MonoBehaviour
     public bool isPaused = false;
     Player player;
     PlayerRespawn playerRespawn;
-    [SerializeField] Slider slider;
+    //[SerializeField] Slider slider;
+    static public float volumeValue;
     // Start is called before the first frame update
     void Start()
     {
         player=FindObjectOfType<Player>();
         playerRespawn=FindObjectOfType<PlayerRespawn>();
-        slider.value=1;
+        //slider.value=volumeValue;
+        //slider.value=1;
     }
 
     // Update is called once per frame
@@ -37,7 +39,7 @@ public class PauseMenu : MonoBehaviour
                 player.IsControllable=false;
             }
         }
-        VolumeControl();
+        //VolumeControl();
     }
     void Pause()
     {
@@ -62,9 +64,10 @@ public class PauseMenu : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void VolumeControl(){
-        AudioListener.volume=slider.value;
-    }
+    // public void VolumeControl(){
+    //     volumeValue=slider.value;
+    //     AudioListener.volume=volumeValue;
+    // }
 
 
 }
