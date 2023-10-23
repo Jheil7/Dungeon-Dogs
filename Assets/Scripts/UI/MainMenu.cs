@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
         titleSpriteOn.enabled = false;
         titleSpriteOff.enabled = true;
         yield return new WaitForSecondsRealtime(3);
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("StoryScene");
     }
 
     public void Quit(){
