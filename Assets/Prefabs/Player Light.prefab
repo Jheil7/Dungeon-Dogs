@@ -75,7 +75,7 @@ MonoBehaviour:
     - {fileID: 0}
     sortingLayer:
       name: Default
-      Order: 10
+      Order: 13
   bumpMap:
     intensity: 1
     depth: 1
@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f824ea377fa2244b9caa126dc16d9cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingLightSize: 15
+  startingLightSize: 20
   lightSize: 0
 --- !u!1 &5434288556137102190
 GameObject:

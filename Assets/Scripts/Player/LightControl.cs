@@ -8,20 +8,19 @@ using UnityEngine.UI;
 public class LightControl : MonoBehaviour
 {
     Player player;
-    public bool attachedToPlayer;
     [SerializeField ] float lightMoveSpeed;
+    [SerializeField] float maxLightValue;
+    [SerializeField] float lightDrainValue;
+    [SerializeField] float lightDrainTimer;
     Vector3 currentPosition;
     Vector3 mousePosition;
     Vector3 worldPosition;
+    public bool attachedToPlayer;
     public bool isTraveling;
     public bool recalling;
     Rigidbody2D lightRb;
-    [SerializeField] float maxLightValue;
-    [SerializeField] float lightDrainValue;
     float lightValue;
-    [SerializeField] float lightDrainTimer;
-    SpriteRenderer spriteRenderer;
-    int sceneIndex;
+    string sceneName;
     Vector3 offset;
 
     public bool IsRecalling{
@@ -48,7 +47,7 @@ public class LightControl : MonoBehaviour
     }
 
     public void SetPositionToTalkingOffset(){
-        Vector3 offset=new Vector3(player.transform.position.x,player.transform.position.y+5,player.transform.position.z);
+        offset=new Vector3(player.transform.position.x,player.transform.position.y+5,player.transform.position.z);
         lightRb.position=offset;
         attachedToPlayer=true;
         isTraveling=false;
@@ -59,17 +58,14 @@ public class LightControl : MonoBehaviour
     void Start()
     {
         isTraveling=false;
-        sceneIndex=SceneManager.GetActiveScene().buildIndex;
-        if(sceneIndex>1){attachedToPlayer=true;}
+        sceneName=SceneManager.GetActiveScene().name;
+        if(!(sceneName=="Cinematic")){attachedToPlayer=true;}
         recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
-        //spriteRenderer=GetComponent<SpriteRenderer>();
         lightValue=maxLightValue;
 
     }
-
-    // Update is called once per frame
 
     void Update() {
         currentPosition=transform.position;
@@ -84,24 +80,20 @@ public class LightControl : MonoBehaviour
         }
         else if(attachedToPlayer){
             transform.position=player.transform.position;
-            //Debug.Log(transform.position);
             isTraveling=false;
             recalling=false;
-            // spriteRenderer.enabled = false;
+
         }
 
     }
 
     void OnFire(){
-        if(player.IsControllable&&sceneIndex>1){
+        if(player.IsControllable&&!(sceneName=="Cinematic")){
             attachedToPlayer=false;
             mousePosition = Input.mousePosition;
             worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
             worldPosition.z=0;
             isTraveling=true;
-            // if(!spriteRenderer.enabled){
-            //     spriteRenderer.enabled = true;
-            // }
         }
 
 
@@ -109,7 +101,7 @@ public class LightControl : MonoBehaviour
     }
 
     void OnAltFire(){
-        if(player.IsControllable&&sceneIndex>1){
+        if(player.IsControllable&&!(sceneName=="Cinematic")){
             recalling=true;
         }
         
@@ -141,7 +133,6 @@ public class LightControl : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Player"){
             StopAllCoroutines();
-            Debug.Log("come back");
         }
     }
 
