@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Dungeon-Dogs.sln"
+    "dotnet.defaultSolution": "Dungeon Dogs.sln"
 }
