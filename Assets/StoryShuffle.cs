@@ -3,46 +3,60 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StoryShuffle : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI text1;
-    [SerializeField] TextMeshProUGUI text2;
-    [SerializeField] TextMeshProUGUI text3;
-    [SerializeField] TextMeshProUGUI text4;
-    [SerializeField] TextMeshProUGUI text5;
-    [SerializeField] TextMeshProUGUI text6;
-    // Start is called before the first frame update
+    [SerializeField] TMP_Text text1;
+    [SerializeField] TMP_Text text2;
+    [SerializeField] TMP_Text text3;
+    [SerializeField] TMP_Text text4;
+    [SerializeField] TMP_Text text5;
+    [SerializeField] TMP_Text text6;
+    [SerializeField] TMP_Text text7;
+    [SerializeField] TMP_Text text8;
+    [SerializeField] TMP_Text text9;
+    [SerializeField] float waitTime = 8f;
+    [SerializeField] Image image;
+
     void Start()
     {
-        StartCoroutine(StoryFadeText());
+        List<TMP_Text> texts = new() {text1, text2, text3, text4, text5, text6, text7, text8, text9};
+        texts.ForEach(text => text.enabled = false);
+        StartCoroutine(StoryFadeText(texts));
     }
 
-    IEnumerator StoryFadeText() {
-        List<TextMeshProUGUI> texts = new() {text1, text2, text3, text4, text5, text6};
-        texts.ForEach(text => text.faceColor = new Color32(text.faceColor.r, text.faceColor.g, text.faceColor.b, 0));
+    IEnumerator StoryFadeText(List<TMP_Text> texts) {
         for(int i = 0; i < texts.Count; i++) {
-            FadeTextToFullAlpha(5f, texts[i]);
-            yield return new WaitForSecondsRealtime(10);
-            FadeTextToZeroAlpha(5f, texts[i]);
+            texts[i].enabled = true;
+            yield return StartCoroutine(FadeImageToZeroAlpha(image));
+            image.color = new Color(0,0,0,0);
+            yield return new WaitForSecondsRealtime(waitTime);
+            yield return StartCoroutine(FadeImageToFullAlpha(image));
+            image.color = new Color(0,0,0,1);
+            texts[i].enabled = false;
         }
+        SceneManager.LoadScene("Cinematic");
     }
 
-    public void FadeTextToFullAlpha(float t, TextMeshProUGUI i)
+    IEnumerator FadeImageToZeroAlpha(Image img)
     {
-        while (i.faceColor.a < 1.0f)
+        for (float i = 1; i >= 0; i -= Time.deltaTime)
         {
-            Debug.Log(i.alpha);
-            i.faceColor = new Color32(i.faceColor.r, i.faceColor.g, i.faceColor.b, i.faceColor.a);
+            // set color with i as alpha
+            img.color = new Color(0, 0, 0, i);
+            yield return null;
         }
     }
  
-    public void FadeTextToZeroAlpha(float t, TextMeshProUGUI i)
+    IEnumerator FadeImageToFullAlpha(Image img)
     {
-        while (i.alpha > 0.0f)
+        for (float i = 0; i <= 1; i += Time.deltaTime)
         {
-            i.alpha -= Time.deltaTime / t;
+            // set color with i as alpha
+            img.color = new Color(0, 0, 0, i);
+            yield return null;
         }
     }
 
