@@ -38,9 +38,9 @@ public class Player : MonoBehaviour
         if(!isDead){
             IsControllable=false;
         }
-        // else{
-        //     IsControllable=true;
-        // }
+        else{
+            IsControllable=true;
+        }
     }
 
     private void FixedUpdate() {

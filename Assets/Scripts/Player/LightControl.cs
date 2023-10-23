@@ -22,6 +22,7 @@ public class LightControl : MonoBehaviour
     [SerializeField] float lightDrainTimer;
     SpriteRenderer spriteRenderer;
     int sceneIndex;
+    Vector3 offset;
 
     public bool IsRecalling{
         get{return recalling;}
@@ -63,7 +64,7 @@ public class LightControl : MonoBehaviour
         recalling=false;
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
-        spriteRenderer=GetComponent<SpriteRenderer>();
+        //spriteRenderer=GetComponent<SpriteRenderer>();
         lightValue=maxLightValue;
 
     }
@@ -73,12 +74,12 @@ public class LightControl : MonoBehaviour
     void Update() {
         currentPosition=transform.position;
         if(isTraveling){
-            MovetoPosition(worldPosition);
+            MovetoPosition();
             LightTraveling();
         }
         else if(recalling){
             worldPosition=player.transform.position;
-            MovetoPosition(worldPosition);
+            MovetoPosition();
             LightTraveling();
         }
         else if(attachedToPlayer){
@@ -86,7 +87,7 @@ public class LightControl : MonoBehaviour
             //Debug.Log(transform.position);
             isTraveling=false;
             recalling=false;
-            spriteRenderer.enabled = false;
+            // spriteRenderer.enabled = false;
         }
 
     }
@@ -98,9 +99,9 @@ public class LightControl : MonoBehaviour
             worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
             worldPosition.z=0;
             isTraveling=true;
-            if(!spriteRenderer.enabled){
-                spriteRenderer.enabled = true;
-            }
+            // if(!spriteRenderer.enabled){
+            //     spriteRenderer.enabled = true;
+            // }
         }
 
 
@@ -125,8 +126,8 @@ public class LightControl : MonoBehaviour
         }
     }
 
-    public void MovetoPosition(Vector3 movePos){
-        lightRb.position=Vector3.MoveTowards(currentPosition,movePos,lightMoveSpeed);
+    public void MovetoPosition(){
+        lightRb.position=Vector3.MoveTowards(currentPosition,worldPosition,lightMoveSpeed);
     }
 
     private void OnTriggerExit2D(Collider2D other) {
