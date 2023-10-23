@@ -122,9 +122,10 @@ GameObject:
   - component: {fileID: 8401494150677873152}
   - component: {fileID: 5660027700506233801}
   - component: {fileID: 3455555692296041252}
+  - component: {fileID: 8614277060413471375}
   m_Layer: 0
   m_Name: Player Light
-  m_TagString: Untagged
+  m_TagString: Light
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,7 +153,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5624224098679464360}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -186,7 +187,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 20
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5085fc70e4217a14494ed0b3c0a980fb, type: 3}
   m_Color: {r: 0.990566, g: 0.990566, b: 0.990566, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -213,9 +214,9 @@ MonoBehaviour:
   lightMoveSpeed: 2
   isTraveling: 0
   recalling: 0
-  maxLightValue: 75
+  maxLightValue: 150
   lightDrainValue: 1
-  lightDrainTimer: 0.5
+  lightDrainTimer: 0.25
 --- !u!114 &8401494150677873152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,3 +309,24 @@ CircleCollider2D:
   m_Offset: {x: -0.2176857, y: 0}
   serializedVersion: 2
   m_Radius: 0.7176857
+--- !u!95 &8614277060413471375
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624224098679464360}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d5c816325ce22fd43929bc787f05531c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
