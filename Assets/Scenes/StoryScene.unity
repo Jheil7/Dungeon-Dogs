@@ -2536,7 +2536,7 @@ MonoBehaviour:
   text9: {fileID: 280868918}
   image9: {fileID: 625983236}
   waitTime: 8
-  fadeTime: 2
+  fadeTime: 1.25
   backgroundImage: {fileID: 1915085375}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
