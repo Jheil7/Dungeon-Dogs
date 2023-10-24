@@ -18,6 +18,7 @@ public class TriggerNextLevel : MonoBehaviour
         sceneIndex=SceneManager.GetActiveScene().buildIndex;
         animator=GetComponent<Animator>();
         vcam=FindObjectOfType<CinemachineVirtualCamera>();
+
     }
 
     // Update is called once per frame
@@ -36,7 +37,13 @@ public class TriggerNextLevel : MonoBehaviour
     public IEnumerator WaitAndLoad(){
         triggerBool=true;
         yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene(sceneIndex+1);
+        if(sceneIndex<SceneManager.sceneCountInBuildSettings){
+            SceneManager.LoadScene(sceneIndex+1);
+        }
+        else{
+            SceneManager.LoadScene("MainMenu");
+        }
+        
     }
 
     public bool Triggerbool(){
