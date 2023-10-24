@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -61,6 +60,7 @@ public class PauseMenu : MonoBehaviour
     }
 
     public void MainMenu(){
+        Time.timeScale=1.0f;
         SceneManager.LoadScene(0);
     }
 
