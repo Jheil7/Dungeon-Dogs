@@ -12,6 +12,7 @@ public class LightControl : MonoBehaviour
     [SerializeField] float maxLightValue;
     [SerializeField] float lightDrainValue;
     [SerializeField] float lightDrainTimer;
+    AudioSource audioClip;
     Vector3 currentPosition;
     Vector3 mousePosition;
     Vector3 worldPosition;
@@ -64,6 +65,7 @@ public class LightControl : MonoBehaviour
         player=FindObjectOfType<Player>();
         lightRb=GetComponent<Rigidbody2D>();
         lightValue=maxLightValue;
+        audioClip=GetComponent<AudioSource>();
 
     }
 
@@ -89,6 +91,7 @@ public class LightControl : MonoBehaviour
 
     void OnFire(){
         if(player.IsControllable&&!(sceneName=="Cinematic")){
+            audioClip.Play();
             attachedToPlayer=false;
             mousePosition = Input.mousePosition;
             worldPosition=Camera.main.ScreenToWorldPoint(mousePosition);
@@ -102,6 +105,7 @@ public class LightControl : MonoBehaviour
 
     void OnAltFire(){
         if(player.IsControllable&&!(sceneName=="Cinematic")){
+            audioClip.Play();
             recalling=true;
         }
         
