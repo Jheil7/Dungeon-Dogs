@@ -29,6 +29,7 @@ public class StoryShuffle : MonoBehaviour
     [SerializeField] float waitTime = 8f;
     [SerializeField] float fadeTime = 1f;
     [SerializeField] Image backgroundImage;
+    AudioSource audioSource;
 
     void Start()
     {
@@ -37,6 +38,7 @@ public class StoryShuffle : MonoBehaviour
         texts.ForEach(text => text.enabled = false);
         images.ForEach(image => image.enabled = false);
         StartCoroutine(StoryFadeText(texts, images));
+        audioSource=GetComponent<AudioSource>();
     }
 
     IEnumerator StoryFadeText(List<TMP_Text> texts, List<Image> images) {
