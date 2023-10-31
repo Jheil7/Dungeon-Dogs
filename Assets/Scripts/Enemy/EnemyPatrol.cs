@@ -10,7 +10,7 @@ public class EnemyPatrol : MonoBehaviour
     void Start()
     {
         myRigidBody=GetComponent<Rigidbody2D>();
-        frontCollider=GetComponent<CapsuleCollider2D>();
+        frontCollider=GetComponentInChildren<CapsuleCollider2D>();
         Physics.IgnoreLayerCollision(7,7);
     }
 
