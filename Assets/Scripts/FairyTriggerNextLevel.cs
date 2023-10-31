@@ -7,17 +7,30 @@ using UnityEngine.SceneManagement;
 public class FairyTriggerNextLevel : TriggerNextLevel
 {
     CinemachineVirtualCamera vcam;
+    float delay=3f;
+    bool triggerBool;
     // Start is called before the first frame update
     void Start()
     {
+        triggerBool = false;
         vcam=FindObjectOfType<CinemachineVirtualCamera>();
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Light"){
             vcam.enabled=false;
-            StartCoroutine("WaitAndLoad");
+            StartCoroutine("WaitAndLoadEpilogue");
         }
     }
-    
+
+    IEnumerator WaitAndLoadEpilogue(){
+        triggerBool = true;
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene("Epilogue"); 
+    }
+
+    public new bool Triggerbool() {
+        return triggerBool;
+    }
+
 }
