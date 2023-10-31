@@ -130,7 +130,6 @@ public class LightControl : MonoBehaviour
         if(other.tag=="Player"&&!attachedToPlayer){
             StopAllCoroutines();
             StartCoroutine("LightDrain");
-            Debug.Log("go out");
         }
     }
 

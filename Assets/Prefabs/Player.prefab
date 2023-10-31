@@ -54,7 +54,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 10
+  m_GravityScale: 9
   m_Material: {fileID: 6200000, guid: 031199a560f4c594f9cceb5986b56dd7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpCount: 0
-  playerSpeed: 900
+  playerSpeed: 1000
   jumpHeight: 40
 --- !u!114 &3652662559447142680
 MonoBehaviour:

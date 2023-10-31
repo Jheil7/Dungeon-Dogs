@@ -24,7 +24,6 @@ public class PlayerRespawn : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Enemy"){
-            Debug.Log("Player Dead");
             animator.SetBool("Dead", true);
         }
     }
