@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -28,75 +29,42 @@ public class Player : MonoBehaviour
     void Start()
     {
         canGroundJump=true;
+        canDoubleJump=true;
         isDead=false;
         isControllable=true;
         playerRigidbody=GetComponent<Rigidbody2D>();
         footCollider=GetComponentInChildren<BoxCollider2D>();
-        animator=GetComponent<Animator>();
-        animator.SetBool("IsJumping",false);
-        animator.SetBool("isLanding",false);
+        animator=GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     void Update()
-    {
-        // if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))&&!animator.GetBool("IsJumping")) {
-        //     jumpCount = 0;
-        //     canDoubleJump=true;
-        //     }
-        // else {
-        //     animator.SetBool("IsJumping", true);
-        //     }    
+    { 
         CheckDeath();
-        PlayerMove();
         NewJump();
         CheckGrounded();
- 
-
+        CheckLandingJumping();
     }
 
     private void FixedUpdate() {
-        CheckDeath();
         PlayerMove();
-        NewJump();
-        CheckGrounded();
     }
 
     void OnMove(InputValue value){
         rawInput=value.Get<Vector2>();
-        if(rawInput.x > 0 && facingLeft) Flip();
-        if(rawInput.x < 0 && !facingLeft) Flip();
+        if(rawInput.x > 0 && facingLeft && !isDead) Flip();
+        if(rawInput.x < 0 && !facingLeft && !isDead) Flip();
     }
     void PlayerMove(){
         if(isControllable){
             Vector2 delta=rawInput*playerSpeed*Time.deltaTime;
             playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
-            if(delta.x != 0) animator.SetFloat("Speed", 1f);
-            else animator.SetFloat("Speed", 0f);
-            // if(playerRigidbody.velocity.y<Mathf.Epsilon){
-            //     animator.SetBool("IsJumping",false);
-            //     animator.SetBool("isLanding",true);
-            // }
-            // else if(playerRigidbody.velocity.y>=Mathf.Epsilon){
-            //     animator.SetBool("IsJumping",true);
-            //     animator.SetBool("isLanding",false);
-            // }
-            
-            }
-            
-        
-        else{
+            if(delta.x != 0) animator.SetFloat("speed", 1f);
+            else animator.SetFloat("speed", 0f);            
+        }else{
             playerRigidbody.velocity=Vector2.zero;
         }
     }
-
-    // void OnJump(){
-    //     if(jumpCount < 1){
-    //         playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
-    //         playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
-    //         jumpCount++;
-    //     }
-    // }
 
     void NewJump(){
         if(Input.GetButtonDown("Jump")){
@@ -135,8 +103,8 @@ public class Player : MonoBehaviour
     }
 
     void CheckDeath(){
-        isDead=!animator.GetBool("Dead");
-        if(!isDead){
+        isDead=animator.GetBool("Dead");
+        if(isDead){
             IsControllable=false;
         }
         else{
@@ -144,14 +112,23 @@ public class Player : MonoBehaviour
         }
     }
 
+    void CheckLandingJumping(){
+        if(playerRigidbody.velocity.y > Mathf.Epsilon && !footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            animator.SetBool("isJumping",true);
+            animator.SetBool("isLanding",false);
+        } else if(playerRigidbody.velocity.y < -1 * Mathf.Epsilon && !footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            animator.SetBool("isJumping",false);
+            animator.SetBool("isLanding",true);
+        } else {
+            animator.SetBool("isJumping", false);
+            animator.SetBool("isLanding", false);
+        }
+    }
+
     void CheckGrounded(){
         if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))&&canGroundJump) {
             jumpCount=2;
             canDoubleJump=true;
-            animator.SetBool("IsJumping", false);
-        } 
-        else {
-            animator.SetBool("IsJumping", true);
-            } 
+        }
     }
 }

@@ -12,26 +12,14 @@ public class PlayerRespawn : MonoBehaviour
     void Start()
     {
         spawnManager=FindObjectOfType<SpawnManager>();
-        animator=GetComponent<Animator>();
+        animator=GetComponentInChildren<Animator>();
         lightControl=FindObjectOfType<LightControl>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Enemy"){
             animator.SetBool("Dead", true);
         }
     }
-
-            
-    
-
-
     public void Respawn(){
         transform.position=spawnManager.ReturnCheckpointPosition();
         lightControl.SetLighttoMax();
