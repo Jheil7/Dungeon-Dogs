@@ -17,13 +17,13 @@ public class PlayerRespawn : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.tag=="Enemy"){
-            animator.SetBool("Dead", true);
+            animator.SetBool("isDead", true);
         }
     }
     public void Respawn(){
         transform.position=spawnManager.ReturnCheckpointPosition();
         lightControl.SetLighttoMax();
         lightControl.SetPositionToPlayer();
-        animator.SetBool("Dead", false);
+        animator.SetBool("isDead", false);
     }
 }

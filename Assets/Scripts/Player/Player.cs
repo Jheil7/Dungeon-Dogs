@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        Application.targetFrameRate=60;
         canGroundJump=true;
         canDoubleJump=true;
         isDead=false;
@@ -41,12 +42,9 @@ public class Player : MonoBehaviour
     void Update()
     { 
         CheckDeath();
-        NewJump();
         CheckGrounded();
+        NewJump();
         CheckLandingJumping();
-    }
-
-    private void FixedUpdate() {
         PlayerMove();
     }
 
@@ -77,6 +75,7 @@ public class Player : MonoBehaviour
                 StartCoroutine("JumpCd");
                 }
             else if(jumpCount==1&&canDoubleJump){
+                animator.SetTrigger("isDoubleJumping");
                 playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
                 playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
                 canDoubleJump=false;
@@ -103,7 +102,7 @@ public class Player : MonoBehaviour
     }
 
     void CheckDeath(){
-        isDead=animator.GetBool("Dead");
+        isDead=animator.GetBool("isDead");
         if(isDead){
             IsControllable=false;
         }
@@ -119,7 +118,7 @@ public class Player : MonoBehaviour
         } else if(playerRigidbody.velocity.y < -1 * Mathf.Epsilon && !footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             animator.SetBool("isJumping",false);
             animator.SetBool("isLanding",true);
-        } else {
+        } else if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
             animator.SetBool("isJumping", false);
             animator.SetBool("isLanding", false);
         }
