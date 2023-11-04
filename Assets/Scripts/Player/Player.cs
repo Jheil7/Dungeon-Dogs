@@ -75,6 +75,7 @@ public class Player : MonoBehaviour
                 StartCoroutine("JumpCd");
                 }
             else if(jumpCount==1&&canDoubleJump){
+                jumpCount--;
                 animator.SetTrigger("isDoubleJumping");
                 playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
                 playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
@@ -102,6 +103,7 @@ public class Player : MonoBehaviour
     }
 
     void CheckDeath(){
+        Debug.Log("you died");
         isDead=animator.GetBool("isDead");
         if(isDead){
             IsControllable=false;
