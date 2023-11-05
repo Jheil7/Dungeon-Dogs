@@ -11,28 +11,32 @@ public class Player : MonoBehaviour
     Rigidbody2D playerRigidbody;
     BoxCollider2D footCollider;
     Animator animator;
-    bool facingLeft = true;
-    bool isControllable;
-    bool isDead;
-    public bool canDoubleJump;
-    public bool canGroundJump;
-    [SerializeField] int jumpCount = 0;
+    bool facingLeft;
+
+    [Header("Respawn Attributes")]
+    [SerializeField] bool isControllable;
+    [SerializeField] bool isDead;
+
     [Header("Movement Attributes")]
+    [SerializeField] bool isGrounded;
+    [SerializeField] bool jumpEnabled;
+    [SerializeField] int jumpCount;
     [SerializeField] float playerSpeed;
     [SerializeField] float jumpHeight;
     
-    public bool IsControllable{
-        get{return isControllable;}
-        set{isControllable=value;}
-        }
+    public bool IsControllable{get;set;}
+
+    void Awake(){
+        facingLeft = true;
+        IsControllable = true;
+        isDead = false;
+        jumpCount = 2;
+        isGrounded = false;
+    }
 
     void Start()
     {
         Application.targetFrameRate=60;
-        canGroundJump=true;
-        canDoubleJump=true;
-        isDead=false;
-        isControllable=true;
         playerRigidbody=GetComponent<Rigidbody2D>();
         footCollider=GetComponentInChildren<BoxCollider2D>();
         animator=GetComponentInChildren<Animator>();
@@ -40,46 +44,52 @@ public class Player : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
-        CheckDeath();
+    {
+        animator.SetFloat("yVelocity", playerRigidbody.velocity.y);
+        isDead = animator.GetBool("dead");
         CheckGrounded();
-        NewJump();
-        CheckLandingJumping();
+        Jump();
         PlayerMove();
+    }
+
+    bool CanMove() {
+        return !isDead && IsControllable;
     }
 
     void OnMove(InputValue value){
         rawInput=value.Get<Vector2>();
-        if(rawInput.x > 0 && facingLeft && !isDead) Flip();
-        if(rawInput.x < 0 && !facingLeft && !isDead) Flip();
+        if(rawInput.x > 0 && facingLeft && CanMove()) Flip();
+        if(rawInput.x < 0 && !facingLeft && CanMove()) Flip();
     }
+    
     void PlayerMove(){
-        if(isControllable){
+        if(CanMove()){
             Vector2 delta=rawInput*playerSpeed*Time.deltaTime;
             playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
             if(delta.x != 0) animator.SetFloat("speed", 1f);
             else animator.SetFloat("speed", 0f);            
-        }else{
+        } else {
             playerRigidbody.velocity=Vector2.zero;
         }
     }
 
-    void NewJump(){
+    void JumpForce(){
+        playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
+        playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
+    }
+
+    void Jump(){
         if(Input.GetButtonDown("Jump")){
-            if(canGroundJump&&jumpCount==2){
-                canGroundJump=false;
+            if(isGrounded&&jumpCount==2){
                 jumpCount--;
-                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
-                playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
-                canDoubleJump=false;
+                JumpForce();
+                jumpEnabled = false;
                 StartCoroutine("JumpCd");
-                }
-            else if(jumpCount==1&&canDoubleJump){
+            }
+            else if(!isGrounded && jumpEnabled && jumpCount==1){
+                animator.SetBool("doubleJump", true);
                 jumpCount--;
-                animator.SetTrigger("isDoubleJumping");
-                playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
-                playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
-                canDoubleJump=false;
+                JumpForce();
             }
         }
         if(Input.GetButtonUp("Jump")){
@@ -98,38 +108,16 @@ public class Player : MonoBehaviour
 
     IEnumerator JumpCd(){
         yield return new WaitForSeconds(0.1f);
-        canGroundJump=true;
-        canDoubleJump=true;
-    }
-
-    void CheckDeath(){
-        Debug.Log("you died");
-        isDead=animator.GetBool("isDead");
-        if(isDead){
-            IsControllable=false;
-        }
-        else{
-            IsControllable=true;
-        }
-    }
-
-    void CheckLandingJumping(){
-        if(playerRigidbody.velocity.y > Mathf.Epsilon && !footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            animator.SetBool("isJumping",true);
-            animator.SetBool("isLanding",false);
-        } else if(playerRigidbody.velocity.y < -1 * Mathf.Epsilon && !footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            animator.SetBool("isJumping",false);
-            animator.SetBool("isLanding",true);
-        } else if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            animator.SetBool("isJumping", false);
-            animator.SetBool("isLanding", false);
-        }
+        jumpEnabled = true;
     }
 
     void CheckGrounded(){
-        if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))&&canGroundJump) {
-            jumpCount=2;
-            canDoubleJump=true;
+        isGrounded = false;
+        if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
+            animator.SetBool("doubleJump", false);
+            isGrounded = true;
+            jumpCount = 2;
         }
+        animator.SetBool("jump", !isGrounded);
     }
 }

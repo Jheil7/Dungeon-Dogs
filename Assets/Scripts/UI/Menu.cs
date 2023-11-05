@@ -27,21 +27,21 @@ public class PauseMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log(player.IsControllable);
             if (isPaused)
             {
                 Resume();
-                player.IsControllable=true;
             }
             else
             {
                 Pause();
-                player.IsControllable=false;
             }
         }
         //VolumeControl();
     }
     void Pause()
     {
+        player.IsControllable=false;
         isPaused = true;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f; // Stop the game
@@ -49,6 +49,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        player.IsControllable=true;
         isPaused = false;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f; // Resume the game
