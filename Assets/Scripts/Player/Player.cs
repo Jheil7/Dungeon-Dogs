@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        Application.targetFrameRate=60;
+        //Application.targetFrameRate=60;
         playerRigidbody=GetComponent<Rigidbody2D>();
         footCollider=GetComponentInChildren<BoxCollider2D>();
         animator=GetComponentInChildren<Animator>();
@@ -64,8 +64,9 @@ public class Player : MonoBehaviour
     
     void PlayerMove(){
         if(CanMove()){
-            Vector2 delta=rawInput*playerSpeed*Time.deltaTime;
+            Vector2 delta=rawInput*playerSpeed;
             playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
+            Debug.Log(playerRigidbody.velocity);
             if(delta.x != 0) animator.SetFloat("speed", 1f);
             else animator.SetFloat("speed", 0f);            
         } else {
@@ -81,15 +82,15 @@ public class Player : MonoBehaviour
     void Jump(){
         if(Input.GetButtonDown("Jump")){
             if(isGrounded&&jumpCount==2){
-                jumpCount--;
                 JumpForce();
+                jumpCount--;
                 jumpEnabled = false;
                 StartCoroutine("JumpCd");
             }
             else if(!isGrounded && jumpEnabled && jumpCount==1){
                 animator.SetBool("doubleJump", true);
-                jumpCount--;
                 JumpForce();
+                jumpCount--;
             }
         }
         if(Input.GetButtonUp("Jump")){
@@ -107,7 +108,7 @@ public class Player : MonoBehaviour
     }
 
     IEnumerator JumpCd(){
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
         jumpEnabled = true;
     }
 
