@@ -82,7 +82,7 @@ MonoBehaviour:
   isGrounded: 0
   jumpEnabled: 0
   jumpCount: 0
-  playerSpeed: 2000
+  playerSpeed: 10
   jumpHeight: 40
 --- !u!114 &3652662559447142680
 MonoBehaviour:
