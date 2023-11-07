@@ -16,7 +16,7 @@ public class EnemyPatrol : MonoBehaviour
 
     void FixedUpdate()
     {
-        myRigidBody.velocity=new Vector2 (Mathf.Sign(transform.localScale.x)*moveSpeed*Time.deltaTime, 0.0f);
+        myRigidBody.velocity=new Vector2 (Mathf.Sign(transform.localScale.x)*moveSpeed, 0.0f);
     }
 
     void OnTriggerExit2D(Collider2D other) {

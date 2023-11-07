@@ -77,10 +77,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6661b4abdf0212409b6397daf122ffa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDoubleJump: 0
-  canGroundJump: 0
+  isControllable: 0
+  isDead: 0
+  isGrounded: 0
+  jumpEnabled: 0
   jumpCount: 0
-  playerSpeed: 1000
+  playerSpeed: 2000
   jumpHeight: 40
 --- !u!114 &3652662559447142680
 MonoBehaviour:
@@ -224,7 +226,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -1.9048561}
+  m_Offset: {x: -0.061332703, y: -1.9048561}
   m_SpriteTilingProperty:
     border: {x: 1.92, y: 0.59, z: 0.71999997, w: 0.81}
     pivot: {x: 0.617, y: 0.4639126}
@@ -235,7 +237,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.1295795, y: 0.3762362}
+  m_Size: {x: 0.6439209, y: 0.3762362}
   m_EdgeRadius: 0
 --- !u!1001 &5153076376183806166
 PrefabInstance:
