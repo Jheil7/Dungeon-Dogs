@@ -82,8 +82,9 @@ MonoBehaviour:
   isGrounded: 0
   jumpEnabled: 0
   jumpCount: 0
-  playerSpeed: 10
+  playerSpeed: 15
   jumpHeight: 40
+  jumpHeightBouncy: 70
 --- !u!114 &3652662559447142680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -109,8 +110,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 1
-  m_DefaultControlScheme: Keyboard&Mouse
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -533,6 +534,7 @@ MonoBehaviour:
   audioClips:
   - {fileID: 8300000, guid: bab6ff9264807dd4ba527fc64163a1bd, type: 3}
   - {fileID: 8300000, guid: 49979142bed2f5343aad62b3354a7bf7, type: 3}
+  - {fileID: 8300000, guid: be8e24d782cd15e4280a0dac9586d02e, type: 3}
 --- !u!114 &2630136494500633017
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] int jumpCount;
     [SerializeField] float playerSpeed;
     [SerializeField] float jumpHeight;
+    [SerializeField] float jumpHeightBouncy;
     
     public bool IsControllable{get;set;}
 
@@ -48,6 +49,7 @@ public class Player : MonoBehaviour
         animator.SetFloat("yVelocity", playerRigidbody.velocity.y);
         isDead = animator.GetBool("dead");
         CheckGrounded();
+        CheckFalling();
         Jump();
         PlayerMove();
     }
@@ -66,7 +68,6 @@ public class Player : MonoBehaviour
         if(CanMove()){
             Vector2 delta=rawInput*playerSpeed;
             playerRigidbody.velocity= new Vector2(delta.x, playerRigidbody.velocity.y);
-            Debug.Log(playerRigidbody.velocity);
             if(delta.x != 0) animator.SetFloat("speed", 1f);
             else animator.SetFloat("speed", 0f);            
         } else {
@@ -74,22 +75,29 @@ public class Player : MonoBehaviour
         }
     }
 
-    void JumpForce(){
+    void JumpForce(float heightToJump){
         playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, 0f);
-        playerRigidbody.AddForce(Vector2.up*jumpHeight, ForceMode2D.Impulse);
+        playerRigidbody.AddForce(Vector2.up*heightToJump, ForceMode2D.Impulse);
     }
 
     void Jump(){
         if(Input.GetButtonDown("Jump")){
-            if(isGrounded&&jumpCount==2){
-                JumpForce();
+            if(jumpCount==2){
+                if(footCollider.IsTouchingLayers(LayerMask.GetMask("Bounce"))){
+                    JumpForce(jumpHeightBouncy);
+                }
+                else{
+                    JumpForce(jumpHeight);
+                }
+                
                 jumpCount--;
                 jumpEnabled = false;
                 StartCoroutine("JumpCd");
+                isGrounded=false;
             }
-            else if(!isGrounded && jumpEnabled && jumpCount==1){
+            else if(jumpEnabled && jumpCount==1){
                 animator.SetBool("doubleJump", true);
-                JumpForce();
+                JumpForce(jumpHeight);
                 jumpCount--;
             }
         }
@@ -113,12 +121,26 @@ public class Player : MonoBehaviour
     }
 
     void CheckGrounded(){
-        isGrounded = false;
-        if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))){
-            animator.SetBool("doubleJump", false);
-            isGrounded = true;
-            jumpCount = 2;
+        if(!isGrounded){
+            if(footCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))||footCollider.IsTouchingLayers(LayerMask.GetMask("Bounce"))){
+                animator.SetBool("doubleJump", false);
+                isGrounded = true;
+                jumpCount = 2;
+            }
         }
         animator.SetBool("jump", !isGrounded);
+    }
+
+    void CheckFalling(){
+        if(playerRigidbody.velocity.y<-1&&jumpCount>1){
+            isGrounded=false;
+            jumpCount=1;
+            }
+    }
+    
+
+    IEnumerator GroundedWait(){
+        yield return new WaitForSeconds(0.1f);
+        isGrounded=true;
     }
 }

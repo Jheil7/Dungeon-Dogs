@@ -20,7 +20,7 @@ public class VolumeFade : MonoBehaviour
         
     }
 
-    // IEnumerator FadeAudio(){
-    //     audioSource.volume=Mathf.Lerp(startVolume,0,fadeTime);
-    // }
+    public void FadeAudio(){
+        audioSource.volume=Mathf.Lerp(startVolume,startVolume-(startVolume/10),fadeTime);
+    }
 }

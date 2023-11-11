@@ -11,6 +11,7 @@ public class TriggerNextLevel : MonoBehaviour
     float delay=3f;
     bool triggerBool;
     CinemachineVirtualCamera vcam;
+    VolumeFade volumeFade;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +19,7 @@ public class TriggerNextLevel : MonoBehaviour
         sceneIndex=SceneManager.GetActiveScene().buildIndex;
         animator=GetComponent<Animator>();
         vcam=FindObjectOfType<CinemachineVirtualCamera>();
+        volumeFade=FindAnyObjectByType<VolumeFade>();
 
     }
 
@@ -31,6 +33,9 @@ public class TriggerNextLevel : MonoBehaviour
         if(other.tag=="Player"){
             vcam.enabled=false;
             StartCoroutine("WaitAndLoad");
+            if(volumeFade!=null){
+                volumeFade.FadeAudio();
+            }
         }
     }
 
