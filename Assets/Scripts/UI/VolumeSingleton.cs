@@ -2,17 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class VolumeSingleton : MonoBehaviour
 {
     static public float volumeValue;
     [SerializeField] Slider slider;
+    private const string FirstTimeKey = "FirstTime";
+    private const string VolumeKey = "Volume";
      
     void Awake()
     {   
-        string sceneIndex=SceneManager.GetActiveScene().name;
-        if(sceneIndex=="MainMenu"){volumeValue=0.5f;}
+        volumeValue=PlayerPrefs.GetFloat("masterVolume",0.5f);
         slider.value=volumeValue;
     }
 
@@ -22,6 +22,7 @@ public class VolumeSingleton : MonoBehaviour
 
     public void VolumeControl(){
         volumeValue=slider.value;
+        PlayerPrefs.SetFloat("masterVolume",volumeValue);
         AudioListener.volume=volumeValue;
     }
 

@@ -116,7 +116,7 @@ public class Player : MonoBehaviour
     }
 
     IEnumerator JumpCd(){
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         jumpEnabled = true;
     }
 

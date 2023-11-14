@@ -21,16 +21,18 @@ public class PlatformBreak : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D other) {
-        StartCoroutine("BreakTimer");
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.tag=="Feet"){
+            //start break animation
+        }
     }
 
     void BreakPlatform(){
 
     }
 
-    IEnumerator BreakTimer(){
-        yield return new WaitForSeconds(2.0f);
+    //add event at end of animation
+    void BreakTimer(){
         spriteRenderer.enabled=false;
         boxCollider2D.enabled=false;
     }
